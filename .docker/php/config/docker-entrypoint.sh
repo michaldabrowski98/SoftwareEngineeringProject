@@ -12,12 +12,12 @@ if [ "$1" = 'php-fpm' ]; then
 		composer install --prefer-dist --no-interaction --optimize-autoloader
 	fi
 
-    # Specifies that nc should only scan for listening daemons
-    # without sending any data to them.
-    # until nc -z ${MYSQL_HOST} ${MYSQL_PORT}; do
-    #     echo "*** Database connection attempt ***"
-    #     sleep 3
-    # done
+     Specifies that nc should only scan for listening daemons
+     without sending any data to them.
+     until nc -z ${MYSQL_HOST} ${MYSQL_PORT}; do
+         echo "*** Database connection attempt ***"
+         sleep 3
+     done
 fi
 
 exec docker-php-entrypoint "$@"

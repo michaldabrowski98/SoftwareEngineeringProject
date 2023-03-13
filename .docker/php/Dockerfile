@@ -24,10 +24,10 @@ RUN apt install symfony-cli
 WORKDIR /var/www/html
 
 COPY .docker/php/config/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod 775 /usr/local/bin/docker-entrypoint.sh
+RUN chmod 777 /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 9000
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/usr/local/bin/docker-entrypoint.sh"]
 
 CMD ["php-fpm"]

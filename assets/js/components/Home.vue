@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     Home controller1
   </div>
 </template>
@@ -9,3 +9,9 @@ export default {
   name: "Home"
 };
 </script>
+
+<style>
+.home {
+  background: #404040;
+}
+</style>

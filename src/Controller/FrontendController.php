@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class FrontendController extends AbstractController
 {
     #[Route('/', name: 'frontend')]
-    #[Route('/{route}', name: 'vue', requirements: ['route' => '^.+'])]
+    #[Route('/{route}', name: 'vue', requirements: ['route' => '^(?!api).*$'])]
     public function index(): Response
     {
         return $this->render('base.html.twig', []);

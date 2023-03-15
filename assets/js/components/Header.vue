@@ -1,8 +1,9 @@
 <template>
-  <div class="header">
-    <div id="logo"><h1>FreeWMS</h1></div>
-    <div id="motto"><h3>lorem -> ipsum -> sssass</h3></div>
-    <div id="clock"><h2>17:00:00</h2></div>
+  <div class="rectangle">
+    <div id="logo"><a href="/" class="tilelinklogo">FreeWMS</a></div>
+    <div id="opis">Dostawy --> Magazynowanie --> Wysyłki</div>
+    <div id="zegar">15/03/2023 | 05:55:55</div>
+    <div style="clear: both;"></div>
   </div>
 </template>
 
@@ -13,29 +14,58 @@ export default {
 </script>
 
 <style>
-  .header {
-    background: #282828;
-    color: white;
-    font-family: Cursor;
-    width: 70%;
-    margin: auto;
-  }
-  #logo {
-    float:left;
-    background:#282828;
-    width:25%;
-    height:80px;
-  }
-  #motto{
-    float:left;
-    background:#282828;
-    width:50%;
-    height:80px;
-  }
-  #clock{
-    float:right;
-    background:#282828;
-    width:25%;
-    height:80px;
-  }
+.rectangle
+{
+  width: 75%;
+  margin: auto;
+  text-align: center;
+}
+#logo {
+  float: left;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 65px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  text-align: center;
+}
+
+a {
+  color: white;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+#opis {
+  float: left;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 18px;
+  margin-top: 25px;
+  margin-left: 40px;
+  text-align: left;
+  margin-bottom: 0px;
+}
+
+#zegar {
+  float: left;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 20px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  text-align: left;
+  padding: 22px;
+}
 </style>

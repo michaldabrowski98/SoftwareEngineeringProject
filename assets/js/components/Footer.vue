@@ -1,5 +1,8 @@
 <template>
-  <div id="footer">FreeWMS</div>
+  <div class="rectangle">
+    <div class="tilebar">2023 &copy; FreeWMS --- Dostawy - Magazynowanie - Wysyłki</div>
+    <div style="clear: both;"></div>
+  </div>
 </template>
 
 <script>
@@ -9,12 +12,17 @@ export default {
 </script>
 
 <style scoped>
-  #footer {
-    background: coral;
-    color: white;
-    font-family: Cursor;
-    width: 70%;
-    margin: auto;
-    height: 50px;
-  }
+.rectangle {
+  width: 75%;
+  margin: auto;
+  text-align: center;
+}
+.tilebar {
+  margin: 10px;
+  height: 25px;
+  padding: 5px;
+  background-color: #ee5a32;
+  padding-right: 55px;
+  text-align: center;
+}
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <AddProductForm/>
   <table class="table-fill">
     <thead>
     <tr>
@@ -18,7 +19,8 @@
       <td class="text-left">{{ product.weight }}</td>
       <td class="text-left">{{ product.price }}</td>
       <td class="text-left">
-        <button v-on:click="">Edytuj</button><button v-on:click="">Usuń</button>
+        <router-link :to="'/product/edit/' + product.id"><button class="edit_button">Edytuj</button></router-link>
+        <button v-on:click="">Usuń</button>
       </td>
     </tr>
     </tbody>
@@ -27,9 +29,11 @@
 
 <script>
 import axios from 'axios';
+import AddProductForm from "./AddProductForm";
 
 export default {
   name: "ProductList",
+  components: {AddProductForm},
   data() {
     return {
       products: null,
@@ -45,18 +49,6 @@ export default {
           this.errors.push(e)
         })
   },
-  methods: {
-    // Pushes posts to the server when called.
-    postPost() {
-      axios.post(`http://localhost:8080/api/product/list`, {
-        body: this.postBody
-      })
-          .then(response => {})
-          .catch(e => {
-            this.errors.push(e)
-          })
-    }
-  }
 }
 </script>
 
@@ -207,20 +199,17 @@ td.text-right {
 
 button {
   color:#D5DDE5;;
-  background:#1b1e24;
-  border-bottom:4px solid #9ea7af;
-  border-right: 1px solid #343a45;
+  background:#ee5a32;
   font-size:18px;
   font-weight: 100;
-  padding:12px;
   text-align:left;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   vertical-align:middle;
   border-radius:3px;
   width: 80px;
+  padding: 3px;
 }
 
-button:last-child {
-  background: red;
+button.edit_button {
+  background: #1b1e24;
 }
 </style>

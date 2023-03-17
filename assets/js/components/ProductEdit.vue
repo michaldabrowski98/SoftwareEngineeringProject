@@ -22,7 +22,7 @@ export default {
     }
   },
   created() {
-    axios.get(`http://localhost:8080/api/product/edit/`+ this.$route.params.id)
+    axios.get(`http://localhost:8082/api/product/edit/`+ this.$route.params.id)
         .then(response => {
           this.product = response.data
         })

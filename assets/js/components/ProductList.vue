@@ -45,7 +45,7 @@ export default {
     }
   },
   created() {
-    axios.get(`http://localhost:8080/api/product/list`)
+    axios.get(`http://localhost:8082/api/product/list`)
         .then(response => {
           this.products = response.data
         })
@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     removeProduct(id) {
-      axios.delete(`http://localhost:8080/api/product/delete/` + id);
+      axios.delete(`http://localhost:8082/api/product/delete/` + id);
     },
     toggleAddProductForm() {
       this.display = !this.display;

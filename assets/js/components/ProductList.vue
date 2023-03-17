@@ -1,5 +1,7 @@
 <template>
-  <AddProductForm/>
+<div class="rectangle">
+  <button v-show="!display" @click="toggleAddProductForm()" id="add_product">Dodaj produkt</button>
+  <div v-show="display"><AddProductForm/></div>
   <table class="table-fill">
     <thead>
     <tr>
@@ -20,11 +22,12 @@
       <td class="text-left">{{ product.price }}</td>
       <td class="text-left">
         <router-link :to="'/product/edit/' + product.id"><button class="edit_button">Edytuj</button></router-link>
-        <button v-on:click="">Usuń</button>
+        <button @click.prevent="removeProduct(product.id)">Usuń</button>
       </td>
     </tr>
     </tbody>
   </table>
+</div>
 </template>
 
 <script>
@@ -37,6 +40,7 @@ export default {
   data() {
     return {
       products: null,
+      display: false,
       errors: []
     }
   },
@@ -49,12 +53,23 @@ export default {
           this.errors.push(e)
         })
   },
+  methods: {
+    removeProduct(id) {
+      axios.delete(`http://localhost:8080/api/product/delete/` + id);
+    },
+    toggleAddProductForm() {
+      this.display = !this.display;
+    }
+  }
 }
 </script>
 
 <style>
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
-
+.rectangle {
+  width: 75%;
+  margin: auto;
+}
 body {
   background-color: #404040;
   font-family: "Roboto", helvetica, arial, sans-serif;
@@ -211,5 +226,12 @@ button {
 
 button.edit_button {
   background: #1b1e24;
+}
+
+button#add_product {
+  width: 50%;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 </style>

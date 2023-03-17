@@ -5,14 +5,26 @@ namespace App\Service;
 use App\DTO\ProductDTO;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ProductService
 {
     private ProductRepository $productRepository;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(ProductRepository $productRepository)
-    {
+    public function __construct(
+        ProductRepository $productRepository,
+        EntityManagerInterface $entityManager
+    ) {
         $this->productRepository = $productRepository;
+        $this->entityManager = $entityManager;
+    }
+
+    public function removeProductById(int $productId): void
+    {
+        $productEntity = $this->productRepository->findOneBy(['id' => $productId]);
+        $this->entityManager->remove($productEntity);
+        $this->entityManager->flush();
     }
 
     public function getProductById(int $productId): ProductDTO

@@ -43,9 +43,20 @@ export default {
 
 <style scoped>
 .rectangle {
-  width: 35%;
+  width: 100%;
   margin: auto;
   text-align: left;
   background: #666B85;
+  padding: 30px;
+}
+input {
+  width: 80%;
+  padding: 10px;
+}
+button {
+  width: 50%;
+  margin-top: 10px;
+  padding: 10px;
+  text-align: center;
 }
 </style>

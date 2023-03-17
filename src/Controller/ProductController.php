@@ -45,7 +45,7 @@ class ProductController extends AbstractController
     #[Route('/api/product/new', name: 'api_product_new', methods: ["POST"])]
     public function newAction(Request $request): JsonResponse
     {
-        $product = $this->getProduct($request);
+        $product = $this->getProduct(json_decode($request->getContent(), true));
         try {
             $this->entityManager->persist($product);
             $this->entityManager->flush();
@@ -56,13 +56,25 @@ class ProductController extends AbstractController
         return new JsonResponse(['success' => true]);
     }
 
-    private function getProduct(Request $request): Product
+    #[Route('/api/product/delete/{id}', name: 'api_product_delete', methods: ["DELETE"])]
+    public function deleteAction(Request $request): JsonResponse
+    {
+        try {
+            $this->productService->removeProductById($request->get('id'));
+        } catch (\Exception) {
+            return new JsonResponse(['success' => false]);
+        }
+
+        return new JsonResponse(['success' => true]);
+    }
+
+    private function getProduct(array $productArray): Product
     {
         return  new Product(
-            $request->get('name'),
-            $request->get('description'),
-            (float)$request->get('weight'),
-            $request->get('price')
+            $productArray['name'],
+            $productArray['description'],
+            (float) $productArray['weight'],
+            $productArray['price']
         );
     }
 }

@@ -1,5 +1,6 @@
 <template>
   <div class="rectangle">
+    <div class="close_button">[x]</div>
     <p>Nazwa produktu</p>
     <input v-model="name" placeholder="nazwa..." />
     <p>Opis produktu</p>
@@ -58,5 +59,10 @@ button {
   margin-top: 10px;
   padding: 10px;
   text-align: center;
+}
+.close_button {
+  text-align: right;
+  width: 100%;
+  padding-left: 5px;
 }
 </style>

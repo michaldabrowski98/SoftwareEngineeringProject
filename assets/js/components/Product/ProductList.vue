@@ -45,13 +45,16 @@ export default {
     }
   },
   created() {
+    if (null == localStorage.getItem('token')) {
+      this.$router.push('/login');
+    }
     axios.get(`http://localhost:8080/api/product/list`)
         .then(response => {
           this.products = response.data
         })
         .catch( e => {
           this.errors.push(e)
-        })
+        });
   },
   methods: {
     removeProduct(id) {

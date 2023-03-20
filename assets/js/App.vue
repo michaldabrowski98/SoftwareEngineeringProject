@@ -13,11 +13,6 @@ import Footer from "./components/Footer";
 export default {
   name: "App",
   components: {Footer, Header},
-  created() {
-    if (null == localStorage.getItem('token')) {
-      this.$router.push('/login');
-    }
-  },
 };
 </script>
 

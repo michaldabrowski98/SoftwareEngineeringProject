@@ -11,11 +11,11 @@
       <br />
       <button type="submit">Login</button>
     </form>
+    <p><router-link to="/register">Załóż konto</router-link></p>
   </div>
 </template>
 
 <script>
-import {mapMutations} from "vuex";
 import axios from "axios";
 export default {
   name: "Login",

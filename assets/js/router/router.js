@@ -1,8 +1,9 @@
 import Home from '../components/Home.vue'
-import ProductList from "../components/ProductList";
+import ProductList from "../components/Product/ProductList";
 import {createRouter, createWebHistory} from 'vue-router'
-import ProductEdit from "../components/ProductEdit";
+import ProductEdit from "../components/Product/ProductEdit";
 import Login from "../components/Login/Login";
+import Registration from "../components/Login/Registration";
 
 export default createRouter({
     history: createWebHistory(),
@@ -26,6 +27,11 @@ export default createRouter({
             name: 'login',
             path: '/login',
             component: Login
+        },
+        {
+            name: 'registration',
+            path: '/register',
+            component: Registration
         }
     ]
 })

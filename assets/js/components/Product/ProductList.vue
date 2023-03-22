@@ -45,17 +45,20 @@ export default {
     }
   },
   created() {
-    axios.get(`http://localhost:8082/api/product/list`)
+    if (null == localStorage.getItem('token')) {
+      this.$router.push('/login');
+    }
+    axios.get(`http://localhost:8080/api/product/list`)
         .then(response => {
           this.products = response.data
         })
         .catch( e => {
           this.errors.push(e)
-        })
+        });
   },
   methods: {
     removeProduct(id) {
-      axios.delete(`http://localhost:8082/api/product/delete/` + id);
+      axios.delete(`http://localhost:8080/api/product/delete/` + id);
     },
     toggleAddProductForm() {
       this.display = !this.display;
@@ -72,9 +75,7 @@ export default {
 }
 body {
   background-color: #404040;
-  font-family: "Roboto", helvetica, arial, sans-serif;
   font-size: 16px;
-  font-weight: 400;
   text-rendering: optimizeLegibility;
 }
 
@@ -89,9 +90,7 @@ div.table-title {
 .table-title h3 {
   color: #fafafa;
   font-size: 30px;
-  font-weight: 400;
   font-style:normal;
-  font-family: "Roboto", helvetica, arial, sans-serif;
   text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
   text-transform:uppercase;
 }
@@ -118,7 +117,6 @@ th {
   border-bottom:4px solid #9ea7af;
   border-right: 1px solid #343a45;
   font-size:23px;
-  font-weight: 100;
   padding:24px;
   text-align:left;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -136,10 +134,9 @@ th:last-child {
 
 tr {
   border-top: 1px solid #C1C3D1;
-  border-bottom-: 1px solid #C1C3D1;
+  border-bottom: 1px solid #C1C3D1;
   color:#666B85;
   font-size:16px;
-  font-weight:normal;
   text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
 }
 
@@ -178,7 +175,6 @@ td {
   padding:20px;
   text-align:left;
   vertical-align:middle;
-  font-weight:300;
   font-size:18px;
   text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
   border-right: 1px solid #C1C3D1;
@@ -216,12 +212,11 @@ button {
   color:#D5DDE5;;
   background:#ee5a32;
   font-size:18px;
-  font-weight: 100;
   text-align:left;
   vertical-align:middle;
   border-radius:3px;
   width: 80px;
-  padding: 3px;
+  padding-bottom: 5px;
 }
 
 button.edit_button {

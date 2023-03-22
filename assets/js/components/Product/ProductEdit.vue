@@ -22,13 +22,16 @@ export default {
     }
   },
   created() {
-    axios.get(`http://localhost:8082/api/product/edit/`+ this.$route.params.id)
+    if (null == localStorage.getItem('token')) {
+      this.$router.push('/login');
+    }
+    axios.get(`http://localhost:8080/api/product/edit/`+ this.$route.params.id)
         .then(response => {
           this.product = response.data
         })
         .catch( e => {
           this.errors.push(e)
-        })
+        });
   }
 }
 </script>

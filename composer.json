@@ -13,6 +13,8 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
         "fakerphp/faker": "^1.21",
+        "friendsofsymfony/rest-bundle": "^3.5",
+        "jms/serializer-bundle": "^5.2",
         "lexik/jwt-authentication-bundle": "^2.18",
         "symfony/apache-pack": "^1.0",
         "symfony/console": "5.4.*",

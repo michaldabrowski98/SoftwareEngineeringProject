@@ -38,13 +38,15 @@ class ProductController extends AbstractController
     }
 
     #[Route('/api/product/list', name: 'api_product_list')]
-    public function listAction(): JsonResponse
+    public function listAction(Request $request): JsonResponse
     {
         if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
             return $invalidAuthentication;
         }
 
-        return new JsonResponse($this->productListService->getAllProducts());
+        $page = $request->get('page') ?? 1;
+
+        return new JsonResponse($this->productListService->getProductsWithPagination($page));
     }
 
     #[Route('/api/product/edit/{id}', name: 'api_product_edit')]

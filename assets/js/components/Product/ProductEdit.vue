@@ -1,12 +1,25 @@
 <template>
   <div class="rectangle">
-    Id: {{ product.id }} <br/>
+    <form action="\App\Controller\ProductController::saveAction">
+      <label for="productId">Id: </label><br>
+      <input type="number" id="productId" name="productId">{{ product.id }}<br>
+      <label for="productName">Nazwa: </label><br>
+      <input type="text" id="productName" name="productName">{{ product.name }}<br>
+      <label for="productDescription">Opis: </label><br>
+      <input type="text" id="productDescription" name="productDescription">{{ product.description }}<br>
+      <label for="productWeight">Waga: </label><br>
+      <input type="number" id="productWeight" name="productWeight">{{ product.weight }}<br>
+      <label for="productPrice">Cena: </label><br>
+      <input type="number" id="productPrice" name="productPrice">{{ product.price }}<br>
+      <input type="submit" value="Submit">
+    </form>
+<!--    Id: {{ product.id }} <br/>
     Nazwa: {{ product.name }}<br/>
     Opis: {{ product.description }}<br/>
     Waga: {{ product.weight }}<br/>
     Cena: {{ product.price }}<br/>
     Ilość sztuk w magazynie: 1234<br/>
-    Lista lokalizacji:<br/>
+    Lista lokalizacji:<br/>-->
   </div>
 </template>
 

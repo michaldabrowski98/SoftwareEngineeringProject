@@ -35,11 +35,33 @@ class ProductController extends AbstractController
         return new JsonResponse($this->productListService->getAllProducts());
     }
 
-    #[Route('/api/product/edit/{id}', name: 'api_product_edit')]
+    #[Route('/api/product/edit/{id}', name: 'api_product_edit', methods: ["POST"])]
     public function editAction(Request $request): JsonResponse
     {
         $productId = (int) $request->get('id');
         return new JsonResponse($this->productService->getProductById($productId));
+    }
+
+    #[Route('/api/product/edit/{id}/save', name: 'api_product_save', methods: ["POST"])]
+    public function saveAction(Request $request): JsonResponse
+    {
+        $productId = (int) $request->get('id');
+        $productName = $request->get('name');
+        $productDescription = $request->get('description');
+        $productWeight = (float) $request->get('weight');
+        $productPrice = $request->get('price');
+        try {
+            $product = $this->productService->getProductById($productId);
+            $product->setName($productName);
+            $product->setDescription($productDescription);
+            $product->setWeight($productWeight);
+            $product->setPrice($productPrice);
+            $this->entityManager->flush();
+        } catch (\Exception) {
+            return new JsonResponse(['success' => false]);
+        }
+
+        return new JsonResponse(['success' => true]);
     }
 
     #[Route('/api/product/new', name: 'api_product_new', methods: ["POST"])]

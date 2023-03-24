@@ -1,6 +1,6 @@
 <template>
-  <div class="rectangle">
-    <div class="close_button">[x]</div>
+  <div class="rectangle" v-show="displayForm">
+    <div class="close_button" @click="toggleView()">[x]</div>
     <p>Nazwa produktu</p>
     <input v-model="name" placeholder="nazwa..." />
     <p>Opis produktu</p>
@@ -25,7 +25,8 @@ export default {
       description: "",
       weight: 0,
       price: 0,
-      requestSuccess: false
+      requestSuccess: false,
+      displayForm: true
     };
   },
   methods: {
@@ -37,6 +38,9 @@ export default {
         price: this.price
       };
       axios.post(`http://localhost:8080/api/product/new`, postData);
+    },
+    toggleView() {
+      this.displayForm = false;
     }
   }
 }

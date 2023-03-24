@@ -41,24 +41,34 @@ export default {
     return {
       products: null,
       display: false,
-      errors: []
+      errors: [],
+      config: {
+        headers: {
+          "Authorization": `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`
+        }
+      }
     }
   },
   created() {
-    if (null == localStorage.getItem('token')) {
+    if (null == sessionStorage.getItem('token')) {
       this.$router.push('/login');
     }
-    axios.get(`http://localhost:8080/api/product/list`)
+
+    axios.get(`http://localhost:8080/api/product/list`, this.config)
         .then(response => {
+          if (response.status !== 200) {
+            this.$router.push('/');
+          }
           this.products = response.data
         })
         .catch( e => {
           this.errors.push(e)
+          this.$router.push('/');
         });
   },
   methods: {
     removeProduct(id) {
-      axios.delete(`http://localhost:8080/api/product/delete/` + id);
+      axios.delete(`http://localhost:8080/api/product/delete/` + id, this.config);
     },
     toggleAddProductForm() {
       this.display = !this.display;

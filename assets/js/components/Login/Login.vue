@@ -40,7 +40,7 @@ export default {
           },
         }).then(
             (res) => {
-              localStorage.setItem('token', JSON.stringify(res.data.token));
+              sessionStorage.setItem('token', JSON.stringify(res.data.token));
               this.$router.push('/');
             }
         ).catch(
@@ -52,7 +52,7 @@ export default {
     },
   },
   created() {
-    if (null != localStorage.getItem('token')) {
+    if (null != sessionStorage.getItem('token')) {
       this.$router.push('/');
     }
   }

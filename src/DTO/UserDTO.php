@@ -6,11 +6,19 @@ class UserDTO implements \JsonSerializable
 {
     private string $email;
 
-    private string $firstName;
-
-    private string $lastName;
+    private string $name;
 
     private \DateTimeImmutable $createdAt;
+
+    public function __construct(
+        string $email,
+        string $name,
+        \DateTimeImmutable $createdAt
+    ) {
+        $this->email = $email;
+        $this->name = $name;
+        $this->createdAt = $createdAt;
+    }
 
     public function getEmail(): string
     {
@@ -22,24 +30,14 @@ class UserDTO implements \JsonSerializable
         $this->email = $email;
     }
 
-    public function getFirstName(): string
+    public function getName(): string
     {
-        return $this->firstName;
+        return $this->name;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setName(string $name): void
     {
-        $this->firstName = $firstName;
-    }
-
-    public function getLastName(): string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): void
-    {
-        $this->lastName = $lastName;
+        $this->name = $name;
     }
 
     public function getCreatedAt(): \DateTimeImmutable
@@ -56,8 +54,7 @@ class UserDTO implements \JsonSerializable
     {
         return [
             'email' => $this->getEmail(),
-            'firstName' => $this->getFirstName(),
-            'lastName' => $this->getLastName(),
+            'name' => $this->getName(),
             'createdAt' => $this->getCreatedAt(),
         ];
     }

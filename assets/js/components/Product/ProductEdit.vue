@@ -22,15 +22,26 @@ export default {
     }
   },
   created() {
-    if (null == localStorage.getItem('token')) {
+    if (null == sessionStorage.getItem('token')) {
       this.$router.push('/login');
     }
-    axios.get(`http://localhost:8080/api/product/edit/`+ this.$route.params.id)
+
+    const config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`
+      }
+    };
+
+    axios.get(`http://localhost:8080/api/product/edit/`+ this.$route.params.id, config)
         .then(response => {
+          if (response.status !== 200) {
+            this.$router.push('/');
+          }
           this.product = response.data
         })
         .catch( e => {
           this.errors.push(e)
+          this.$router.push('/');
         });
   }
 }

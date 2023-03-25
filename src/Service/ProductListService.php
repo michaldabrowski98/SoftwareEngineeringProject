@@ -15,9 +15,9 @@ class ProductListService
         $this->productRepository = $productRepository;
     }
 
-    public function getAllProducts(): array
+    public function getProductsWithPagination(int $page): array
     {
-        $products = $this->productRepository->findAll();
+        $products = $this->productRepository->getProductsWithPagination($page);
 
         return $this->getProducts($products);
     }

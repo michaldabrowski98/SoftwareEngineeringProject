@@ -4,6 +4,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import ProductEdit from "../components/Product/ProductEdit";
 import Login from "../components/Login/Login";
 import Registration from "../components/Login/Registration";
+import UserPage from "../components/UserPage/UserPage";
 
 export default createRouter({
     history: createWebHistory(),
@@ -32,6 +33,11 @@ export default createRouter({
             name: 'registration',
             path: '/register',
             component: Registration
+        },
+        {
+            name: 'user',
+            path: '/user',
+            component: UserPage
         }
     ]
 })

@@ -20,13 +20,13 @@ class ProductRepository extends ServiceEntityRepository
             ->orderBy('p.id', 'DESC')
             ->getQuery();
 
-        $paginator = new Paginator($query);
-        $paginator
-            ->getQuery()
-            ->setFirstResult($pageSize * ($page-1))
-            ->setMaxResults($pageSize);
+//        $paginator = new Paginator($query);
+//        $paginator
+//            ->getQuery()
+//            ->setFirstResult($pageSize * ($page-1))
+//            ->setMaxResults($pageSize);
 
-        return $paginator->getQuery()->getResult();
+        return $query->getResult();
     }
 
     public function save(Product $entity, bool $flush = false): void

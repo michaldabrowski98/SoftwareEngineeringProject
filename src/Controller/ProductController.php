@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Service\ProductCreator;
 use App\Service\ProductListService;
 use App\Service\ProductService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
+    private ProductCreator $productCreator;
+
     private ProductListService $productListService;
 
     private ProductService $productService;
@@ -22,8 +25,10 @@ class ProductController extends AbstractController
     public function __construct(
         ProductListService $productListService,
         ProductService $productService,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        ProductCreator $productCreator
     ) {
+        $this->productCreator = $productCreator;
         $this->productListService = $productListService;
         $this->productService = $productService;
         $this->entityManager = $entityManager;
@@ -35,7 +40,7 @@ class ProductController extends AbstractController
         return new JsonResponse($this->productListService->getAllProducts());
     }
 
-    #[Route('/api/product/edit/{id}', name: 'api_product_edit', methods: ["POST"])]
+    #[Route('/api/product/edit/{id}', name: 'api_product_edit', methods: ["GET"])]
     public function editAction(Request $request): JsonResponse
     {
         $productId = (int) $request->get('id');
@@ -46,18 +51,12 @@ class ProductController extends AbstractController
     public function saveAction(Request $request): JsonResponse
     {
         $productId = (int) $request->get('id');
-        $productName = $request->get('name');
-        $productDescription = $request->get('description');
-        $productWeight = (float) $request->get('weight');
-        $productPrice = $request->get('price');
+        $productData = json_decode($request->getContent(), true);
         try {
-            $product = $this->productService->getProductById($productId);
-            $product->setName($productName);
-            $product->setDescription($productDescription);
-            $product->setWeight($productWeight);
-            $product->setPrice($productPrice);
+            $product = $this->productCreator->getProductEntityById($productId, $productData);
+            $this->entityManager->persist($product);
             $this->entityManager->flush();
-        } catch (\Exception) {
+        } catch (\Exception $e) {
             return new JsonResponse(['success' => false]);
         }
 
@@ -99,4 +98,5 @@ class ProductController extends AbstractController
             $productArray['price']
         );
     }
+
 }

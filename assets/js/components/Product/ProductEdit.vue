@@ -1,17 +1,16 @@
 <template>
   <div class="rectangle">
-    <form action="\App\Controller\ProductController::saveAction">
-      <label for="productId">Id: </label><br>
-      <input type="number" id="productId" name="productId">{{ product.id }}<br>
-      <label for="productName">Nazwa: </label><br>
-      <input type="text" id="productName" name="productName">{{ product.name }}<br>
-      <label for="productDescription">Opis: </label><br>
-      <input type="text" id="productDescription" name="productDescription">{{ product.description }}<br>
-      <label for="productWeight">Waga: </label><br>
-      <input type="number" id="productWeight" name="productWeight">{{ product.weight }}<br>
-      <label for="productPrice">Cena: </label><br>
-      <input type="number" id="productPrice" name="productPrice">{{ product.price }}<br>
-      <input type="submit" value="Submit">
+    <form @submit.prevent="saveEditProduct">
+      <label for="productId">Id: </label> {{ this.$route.params.id }}<br>
+      <p>Nazwa: </p><br>
+      <input v-model="name" :placeholder= " name "><br>
+      <p>Opis: </p><br>
+      <input v-model="description" :placeholder= " description "><br>
+      <p>Waga: </p><br>
+      <input v-model="weight" :placeholder= " weight "><br>
+      <p>Cena: </p><br>
+      <input v-model="price" :placeholder= " price "><br>
+      <button type="submit">Zapisz</button>
     </form>
 <!--    Id: {{ product.id }} <br/>
     Nazwa: {{ product.name }}<br/>
@@ -30,7 +29,10 @@ export default {
   name: "ProductEdit",
   data() {
     return {
-      product: null,
+      name: "",
+      description: "",
+      weight: 0,
+      price: 0,
       errors: []
     }
   },
@@ -45,8 +47,20 @@ export default {
         .catch( e => {
           this.errors.push(e)
         });
+  },
+  methods: {
+    saveEditProduct() {
+      const postData = {
+        name: this.name,
+        description: this.description,
+        weight: this.weight,
+        price: this.price
+    };
+      axios.post(`http://localhost:8082/api/product/edit/` + this.$route.params.id + `/save`, postData);
+    },
   }
 }
+
 </script>
 
 <style scoped>

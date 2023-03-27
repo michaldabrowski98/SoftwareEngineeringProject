@@ -20,6 +20,11 @@ class ProductService
         $this->entityManager = $entityManager;
     }
 
+    public function getProductEntityById(int $id): Product
+    {
+        return $this->productRepository->findOneBy(['id' => $id]);
+    }
+
     public function removeProductById(int $productId): void
     {
         $productEntity = $this->productRepository->findOneBy(['id' => $productId]);

@@ -37,7 +37,7 @@ export default {
         weight: this.weight,
         price: this.price
       };
-      axios.post(`http://localhost:8080/api/product/new`, postData);
+      axios.post(`http://localhost:8082/api/product/new`, postData);
     },
     toggleView() {
       this.displayForm = false;

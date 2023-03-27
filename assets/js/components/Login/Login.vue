@@ -32,7 +32,7 @@ export default {
       if (this.username.length === 0 || this.password.length === 0) {
         this.displayError = true;
       } else {
-        axios.post("http://localhost:8080/api/login_check", {
+        axios.post("http://localhost:8082/api/login_check", {
           username: this.username,
           password: this.password,
           headers: {

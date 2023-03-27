@@ -18,7 +18,7 @@ services:
   apache:
     build: ./.docker/apache
     ports:
-      - '8080:80'
+      - '8082:80'
     volumes:
       - ./public:/var/www/html/public:ro
       - ./.docker/apache/config/vhosts.conf:/etc/apache2/sites-enabled/vhosts.conf:ro

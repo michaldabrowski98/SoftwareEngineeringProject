@@ -18,7 +18,7 @@
       <div>Data utworzenia konta: <i>{{this.createdDate}}</i></div>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="#ee5a32">
+      <v-btn color="#ee5a32" @click="logout">
         Wyloguj
       </v-btn>
     </v-card-actions>
@@ -35,6 +35,12 @@ export default {
       name: "",
       email: "",
       createdDate: null
+    }
+  },
+  methods: {
+    logout() {
+      sessionStorage.removeItem('token');
+      this.$router.push('/login');
     }
   },
   created() {

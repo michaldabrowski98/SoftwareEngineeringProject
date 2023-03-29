@@ -4,7 +4,7 @@
       <h1>LOGIN</h1>
       <v-form fast-fail @submit.prevent="login">
         <v-text-field v-model="username" placeholder="email" />
-        <v-text-field v-model="password" placeholder="hasło"/>
+        <v-text-field v-model="password" placeholder="hasło" type="password"/>
         <v-btn type="submit" block class="mt-2" style="background:#ee5a32">Login</v-btn>
       </v-form>
       <router-link to="/register">Załóż konto</router-link>

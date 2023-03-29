@@ -1,40 +1,27 @@
 <template>
-  <div class="rectangle">
-    <h1>Rejestracja</h1>
-    <div v-show="displaySuccess"><FlashMessage message="Konto zostało utworzone!" type="success"/></div>
-    <div v-show="displayError"><FlashMessage message="Wystąpił błąd! Sprawdź poprawność podanych danych." type="error"/></div>
-    <form @submit.prevent="register">
-      <input v-model="email" placeholder="email" />
-      <br />
-      <br />
-      <input v-model="password" placeholder="hasło" type="password" />
-      <br />
-      <br />
-      <input v-model="firstName" placeholder="imię" type="text" />
-      <br />
-      <br />
-      <input v-model="lastName" placeholder="nazwisko" type="text" />
-      <br />
-      <br />
-      <select v-model="roles">
-        <option value="ROLE_USER_ADMIN">Administrator</option>
-        <option value="ROLES_USER_MANAGER">Kierownik</option>
-        <option value="ROLE_USER_REGULAR_WORKER">Magazynier</option>
-      </select>
-      <br />
-      <br />
-      <button type="submit">Załóż konto</button>
-    </form>
-  </div>
+  <v-container fluid style="height: 70vh">
+    <v-sheet width="50%" class="mx-auto pa-12" rounded="true">
+      <h1>Rejestracja</h1>
+    <v-form fast-fail @submit.prevent="register">
+      <v-text-field v-model="email" placeholder="email" />
+      <v-text-field v-model="password" placeholder="hasło" type="password" />
+      <v-text-field v-model="firstName" placeholder="imię" type="text" />
+      <v-text-field v-model="lastName" placeholder="nazwisko" type="text" />
+      <v-select v-model="roles" label="Stanowisko"
+        :items="['Administrator', 'Kierownik', 'Magazynier']"
+        >
+      </v-select>
+      <v-btn type="submit" block class="mt-2" style="background:#ee5a32">Załóż konto</v-btn>
+    </v-form>
+    </v-sheet>
+  </v-container>
 </template>
 
 <script>
 import axios from "axios";
-import FlashMessage from "../FlashMessage/FlashMessage";
 
 export default {
   name: "RegistrationPage",
-  components: {FlashMessage},
   data() {
     return {
       email: "",
@@ -44,7 +31,6 @@ export default {
       roles: [],
       displayError: false,
       displaySuccess: false,
-      flashMessageText: "",
       message: ""
     }
   },

@@ -57,6 +57,7 @@ export default {
         {title: "DOSTAWY", link: "/public", image: "https://lh4.googleusercontent.com/QJ08cX9JdI1gvw_fSXgwzc8G7HxBw3-xgstJk_ObtTt6GOU1okaaFKp06KBO6QblZhY=w2400"},
         {title: "PRODUKTY", link: "/product/list", image: "https://lh5.googleusercontent.com/Ld-cSP6jh1hDLD43iqijBxKd9O-23UPVGu4mS8VCW0a9HV8SrZDA5gJO6mCvLc0dFtA=w2400"},
         {title: "WYSYŁKI", link: "/public", image: "https://lh3.googleusercontent.com/_Y5SDND28aBII8s2zVcgL9r1OwaK50wtklIewc8boL5FCLhGEWWz6O2RRSVTUm-j6js=w2400"},
+        {title: "MAGAZYN", link: "/warehouse/scheme", image: "https://lh3.googleusercontent.com/_Y5SDND28aBII8s2zVcgL9r1OwaK50wtklIewc8boL5FCLhGEWWz6O2RRSVTUm-j6js=w2400"},
       ]
     }
   },

@@ -32,6 +32,14 @@ class Shelf
     #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id')]
     private ?Product $product = null;
 
+    public function __construct(int $alley, int $level, int $col, float $maxWeight)
+    {
+        $this->alley = $alley;
+        $this->level = $level;
+        $this->col = $col;
+        $this->maxWeight = $maxWeight;
+    }
+
     public function getId(): int
     {
         return $this->id;

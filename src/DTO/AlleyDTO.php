@@ -6,6 +6,10 @@ class AlleyDTO implements \JsonSerializable
 {
     private int $alleyNum;
 
+    private int $columnCount;
+
+    private int $shelfCount;
+
     /**
      * @var ColumnDTO[] $columns
      */
@@ -19,6 +23,26 @@ class AlleyDTO implements \JsonSerializable
     public function setAlleyNum(int $alleyNum): void
     {
         $this->alleyNum = $alleyNum;
+    }
+
+    public function getColumnCount(): int
+    {
+        return $this->columnCount;
+    }
+
+    public function setColumnCount(int $columnCount): void
+    {
+        $this->columnCount = $columnCount;
+    }
+
+    public function getShelfCount(): int
+    {
+        return $this->shelfCount;
+    }
+
+    public function setShelfCount(int $shelfCount): void
+    {
+        $this->shelfCount = $shelfCount;
     }
 
     public function getColumns(): array
@@ -35,6 +59,8 @@ class AlleyDTO implements \JsonSerializable
     {
         return [
             'alleyNum' => $this->getAlleyNum(),
+            'columnCount' => $this->getColumnCount(),
+            'shelfCount' => $this->getShelfCount(),
             'columns' => $this->getColumns(),
         ];
     }

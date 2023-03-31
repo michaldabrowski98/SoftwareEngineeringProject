@@ -20,7 +20,8 @@ const router = createRouter({
         { path: '/product/edit/:id', component: ProductEdit },
         { path: '/login', component: Login },
         { path: '/register', component: Registration },
-        { path: '/user', component: UserPage }
+        { path: '/user', component: UserPage },
+        { path: '/warehouse/scheme', component: WarehousePage },
     ]
 })
 
@@ -28,6 +29,7 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import WarehousePage from "@/components/Warehouse/WarehousePage";
 
 const vuetify = createVuetify({
     ssr: true,

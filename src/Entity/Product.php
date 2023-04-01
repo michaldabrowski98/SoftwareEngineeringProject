@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,6 +28,9 @@ class Product
     #[ORM\Column(length: 255)]
     private string $price;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Shelf::class)]
+    private Collection $shelves;
+
     public function __construct(
         string $name,
         ?string $description,
@@ -36,6 +41,7 @@ class Product
         $this->description = $description;
         $this->weight = $weight;
         $this->price = $price;
+        $this->shelves = new ArrayCollection();
     }
 
 
@@ -87,5 +93,35 @@ class Product
     public function setPrice(string $price): void
     {
         $this->price = $price;
+    }
+
+    /**
+     * @return Collection<int, Shelf>
+     */
+    public function getShelves(): Collection
+    {
+        return $this->shelves;
+    }
+
+    public function addShelf(Shelf $shelf): self
+    {
+        if (!$this->shelves->contains($shelf)) {
+            $this->shelves->add($shelf);
+            $shelf->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShelf(Shelf $shelf): self
+    {
+        if ($this->shelves->removeElement($shelf)) {
+            // set the owning side to null (unless already changed)
+            if ($shelf->getProduct() === $this) {
+                $shelf->setProduct(null);
+            }
+        }
+
+        return $this;
     }
 }

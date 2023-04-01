@@ -28,8 +28,17 @@ class Shelf
     #[ORM\Column(nullable: true)]
     private ?int $quantity = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $productId = null;
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'shelves')]
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id')]
+    private ?Product $product = null;
+
+    public function __construct(int $alley, int $level, int $col, float $maxWeight)
+    {
+        $this->alley = $alley;
+        $this->level = $level;
+        $this->col = $col;
+        $this->maxWeight = $maxWeight;
+    }
 
     public function getId(): int
     {
@@ -91,14 +100,14 @@ class Shelf
         $this->quantity = $quantity;
     }
 
-    public function getProductId(): ?int
+    public function getProduct(): ?Product
     {
-        return $this->productId;
+        return $this->product;
     }
 
-    public function setProductId(?int $productId): void
+    public function setProduct(?Product $product): void
     {
-        $this->productId = $productId;
+        $this->product = $product;
     }
 
 }

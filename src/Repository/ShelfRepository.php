@@ -6,14 +6,6 @@ use App\Entity\Shelf;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Shelf>
- *
- * @method Shelf|null find($id, $lockMode = null, $lockVersion = null)
- * @method Shelf|null findOneBy(array $criteria, array $orderBy = null)
- * @method Shelf[]    findAll()
- * @method Shelf[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class ShelfRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -39,28 +31,13 @@ class ShelfRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return ShelfFixture[] Returns an array of ShelfFixture objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getLastAlleyNumber(): int
+    {
+        $result = $this->createQueryBuilder('s')
+            ->select('DISTINCT s.alley')
+            ->getQuery()
+            ->getSingleColumnResult();
 
-//    public function findOneBySomeField($value): ?ShelfFixture
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return max($result);
+    }
 }

@@ -54,7 +54,7 @@ export default {
       this.$router.push('/login');
     }
 
-    axios.get(`http://localhost:8080/api/product/list`, this.config)
+    axios.get(`http://localhost:8082/api/product/list`, this.config)
         .then(response => {
           if (response.status !== 200) {
             this.$router.push('/');
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     removeProduct(id) {
-      axios.delete(`http://localhost:8080/api/product/delete/` + id, this.config);
+      axios.delete(`http://localhost:8082/api/product/delete/` + id, this.config);
     },
     toggleAddProductForm() {
       this.display = !this.display;

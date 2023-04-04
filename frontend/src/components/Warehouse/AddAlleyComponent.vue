@@ -139,7 +139,7 @@ export default {
           "Authorization": `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`
         }
       }
-      axios.put(`http://localhost:8080/api/warehouse/new/alley`, requestData)
+      axios.put(`http://localhost:8082/api/warehouse/new/alley`, requestData)
           .then(
               (res) => {
                 if (res.status !== 200) {

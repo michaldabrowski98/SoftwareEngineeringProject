@@ -55,7 +55,7 @@ export default {
     };
 
     if (null == sessionStorage.getItem('userData')) {
-      axios.get(`http://localhost:8080/api/user/data`, config)
+      axios.get(`http://localhost:8082/api/user/data`, config)
           .then(response => {
             if (response.status !== 200) {
               this.$router.push('/login');

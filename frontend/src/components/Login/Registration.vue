@@ -45,7 +45,7 @@ export default {
       ) {
         this.displayError = true;
       } else {
-        axios.post("http://localhost:8080/api/register", {
+        axios.post("http://localhost:8082/api/register", {
           email: this.email,
           password: this.password,
           firstName: this.firstName,

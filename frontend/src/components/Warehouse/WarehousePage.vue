@@ -40,7 +40,7 @@ export default {
     }
   },
   mounted() {
-    axios.get(`http://localhost:8080/api/warehouse/scheme`, this.config)
+    axios.get(`http://localhost:8082/api/warehouse/scheme`, this.config)
         .then(response => {
           if (response.status !== 200) {
             this.$router.push('/');

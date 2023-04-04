@@ -1,18 +1,16 @@
 <template>
-  <div class="rectangle">
-    <form @submit.prevent="saveEditProduct">
-      <label for="productId">Id: </label> {{ this.$route.params.id }}<br>
-      <p>Nazwa: </p><br>
-      <input v-model="name" :placeholder= " name "><br>
-      <p>Opis: </p><br>
-      <input v-model="description" :placeholder= " description "><br>
-      <p>Waga: </p><br>
-      <input v-model="weight" :placeholder= " weight "><br>
-      <p>Cena: </p><br>
-      <input v-model="price" :placeholder= " price "><br>
-      <button type="submit">Zapisz</button>
-    </form>
-  </div>
+  <v-container fluid style="height: 70vh">
+    <v-sheet width="80%" class="mx-auto pa-12" rounded="true">
+      <v-form @submit.prevent="saveEditProduct">
+        <h1>ID PRODUKTU:  {{ this.$route.params.id }}</h1>
+        <v-text-field v-model="name" label="Nazwa"/>
+        <v-text-field v-model="description" label="Opis"/>
+        <v-text-field v-model="weight" label="Waga"/>
+        <v-text-field v-model="price" label="Cena"/>
+        <v-btn type="submit" block class="mt-2" style="background:#ee5a32">Zapisz</v-btn>
+      </v-form>
+    </v-sheet>
+  </v-container>
 </template>
 
 <script>
@@ -39,13 +37,16 @@ export default {
         "Authorization": `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`
       }
     };
-
     axios.get(`http://localhost:8082/api/product/edit/`+ this.$route.params.id, config)
         .then(response => {
           if (response.status !== 200) {
-            this.$router.push('/');
+            this.$router.push('/')
           }
-          this.product = response.data
+          this.product = response.data;
+          this.name = this.product.name;
+          this.description = this.product.description;
+          this.weight = this.product.weight;
+          this.price = this.product.price;
         })
         .catch( e => {
           this.errors.push(e)

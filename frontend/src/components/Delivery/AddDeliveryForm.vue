@@ -53,12 +53,17 @@ export default {
   methods: {
     addProductToShelf() {
       const postData = {
-        id: this.$route.params.id,
-        quantity: this.quantity,
+        id: parseInt(this.$route.params.id),
+        quantity: parseInt(this.quantity),
         weight: this.weight,
-        totalWeight: this.quantity * this.weight
+        totalWeight: this.quantity * this.weight,
       };
-      axios.post(`http://localhost:8082/api/shelf/addProduct`, postData);
+
+      axios.post(`http://localhost:8082/api/shelf/addProduct`, postData, {
+        headers: {
+          "Authorization": `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`
+        }
+      });
     },
   }
 }

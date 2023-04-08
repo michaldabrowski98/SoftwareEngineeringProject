@@ -40,4 +40,16 @@ class ShelfRepository extends ServiceEntityRepository
 
         return max($result);
     }
+
+    public function getShelfWithProductOrEmpty(int $productId): array
+    {
+        $result = $this->createQueryBuilder('s')
+            ->select()
+            ->where('s.product_id == productId OR s.quantity == NULL')
+            ->setParameter('productId', $productId)
+            ->getQuery()
+            ->getArrayResult();
+
+        return $result;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\AddProductToShelfDTO;
 use App\Service\AuthenticationChecker;
 use App\Service\ShelfCreator;
 use App\Service\ShelfService;
@@ -63,5 +64,27 @@ class ShelfController extends AbstractController
     public function removeAlleyAction(Request $request): JsonResponse
     {
         return new JsonResponse(['message' => 'success']);
+    }
+
+    #[Route('/api/shelf/addProduct', name: 'api_warehouse_shelf_add_product', methods: ["POST"])]
+    public function addProductToShelf (Request $request): JsonResponse
+    {
+        if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
+            return $invalidAuthentication;
+        }
+
+        $addProductToShelfDTO = $this->addProductToShelfDTO(json_decode($request->getContent(), true));
+        $this->shelfService->addProductToShelf($addProductToShelfDTO);
+        return new JsonResponse("DUPA");
+    }
+
+    private function addProductToShelfDTO(array $array): AddProductToShelfDTO
+    {
+        return  new AddProductToShelfDTO(
+            (int) $array['id'],
+            (float) $array['weight'],
+            (float) $array['totalWeight'],
+            (int) $array['quantity']
+        );
     }
 }

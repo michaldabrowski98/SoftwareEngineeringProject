@@ -4,21 +4,25 @@ namespace App\Service;
 
 use App\Builder\AlleyBuilder;
 use App\DTO\AddProductToShelfDTO;
+use App\Entity\Shelf;
+use App\Repository\ProductRepository;
 use App\Repository\ShelfRepository;
 
 class ShelfService
 {
     private ShelfRepository $shelfRepository;
-
+    private ProductRepository $productRepository;
     private AlleyBuilder $alleyBuilder;
 
     public function __construct(
-        ShelfRepository $shelfRepository,
-        AlleyBuilder    $alleyBuilder
+        ShelfRepository   $shelfRepository,
+        AlleyBuilder      $alleyBuilder,
+        ProductRepository $productRepository
     )
     {
         $this->shelfRepository = $shelfRepository;
         $this->alleyBuilder = $alleyBuilder;
+        $this->productRepository = $productRepository;
     }
 
     public function getWarehouseScheme(): array
@@ -31,13 +35,24 @@ class ShelfService
     {
         $availableShelf = $this->shelfRepository->getShelfWithProductOrEmpty($addProductToShelf->getId());
         $calculatedWeight = $addProductToShelf->getTotalWeight();
-        while ($calculatedWeight <= 0) {
-            foreach ($availableShelf as $shelf)
-            $quantity = $shelf['max_weight'] / $addProductToShelf->getWeight();
+        foreach ($availableShelf as $shelf) {
+            if ($calculatedWeight <= 0) break;
+            $quantity = $shelf['maxWeight'] / $addProductToShelf->getWeight();
             $shelf['product_id'] = $addProductToShelf->getId();
             $shelf['quantity'] = $quantity;
-            $this->shelfRepository->save($shelf);
-            $calculatedWeight = -$quantity * $addProductToShelf->getTotalWeight();
+            $this->shelfRepository->merge($this->createShelfEntity($shelf));
+            $usedWeight = $quantity * $addProductToShelf->getWeight();
+            $calculatedWeight = $calculatedWeight - $usedWeight;
         }
+    }
+
+    private function createShelfEntity(mixed $type): Shelf
+    {
+        $shelf = new Shelf($type['alley'], $type['level'], $type['col'], $type['maxWeight']);
+        $shelf->setId($type['id']);
+        $shelf->setQuantity($type['quantity']);
+        $product = $this->productRepository->findOneBy(['id'=> $type['product_id']]);
+        $shelf->setProduct($product);
+        return $shelf;
     }
 }

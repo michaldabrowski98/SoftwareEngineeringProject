@@ -43,12 +43,15 @@ class ShelfRepository extends ServiceEntityRepository
 
     public function getShelfWithProductOrEmpty(int $productId): array
     {
-/*        $result = $this->createQueryBuilder('s')
-            ->select()
-            ->where('s.product_id = :productId OR s.quantity is NULL')
+        return $this->createQueryBuilder('s')
+            ->where('s.quantity is null or s.product = :productId')
             ->setParameter('productId', $productId)
             ->getQuery()
-            ->getArrayResult();*/
-        return $this->getEntityManager()->createQuery("select s from shelf s where s.product_id = 120 or s.quantity is null")->getArrayResult();
+            ->getArrayResult();
+    }
+
+    public function merge(Shelf $shelf){
+        $this->getEntityManager()->merge($shelf);
+        $this->getEntityManager()->flush();
     }
 }

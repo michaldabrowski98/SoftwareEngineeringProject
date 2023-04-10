@@ -53,5 +53,5 @@ class ShelfRepository extends ServiceEntityRepository
     public function merge(Shelf $shelf){
         $this->getEntityManager()->merge($shelf);
         $this->getEntityManager()->flush();
-    }//
+    }
 }

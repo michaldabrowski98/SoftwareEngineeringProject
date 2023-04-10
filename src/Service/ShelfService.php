@@ -53,6 +53,6 @@ class ShelfService
         $shelf->setQuantity($type['quantity']);
         $product = $this->productRepository->findOneBy(['id'=> $type['product_id']]);
         $shelf->setProduct($product);
-        return $shelf;//
+        return $shelf;
     }
 }

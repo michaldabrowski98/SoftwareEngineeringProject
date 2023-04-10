@@ -3,8 +3,8 @@
     <v-sheet width="80%" class="mx-auto pa-12" rounded="true">
       <v-form @submit.prevent="addProductToShelf">
         <h1>ID PRODUKTU:  {{ this.$route.params.id }}</h1>
-        <v-text-field v-model="name" label="Nazwa"/> //dodać blokadę edycji
-        <v-text-field v-model="description" label="Opis"/> //dodać blokadę edycji
+        <v-text-field v-model="name" label="Nazwa" readonly/>
+        <v-text-field v-model="description" label="Opis" readonly/>
         <v-text-field v-model="quantity" label="Ilość"/>
         <v-btn type="submit" block class="mt-2" style="background:#ee5a32">Dodaj na półkę</v-btn>
       </v-form>

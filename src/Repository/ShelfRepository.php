@@ -40,4 +40,29 @@ class ShelfRepository extends ServiceEntityRepository
 
         return max($result);
     }
+
+    public function getShelfsByProductOrEmpty(int $productId, int $productQuantity): array
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s, p')
+            ->leftJoin('s.product', 'p')
+            ->andWhere(
+                '(p = :productId AND s.maxWeight > p.weight * :productQuantity) 
+                OR (s.product IS NULL AND s.quantity IS NULL)'
+            )
+            ->setParameter('productId', $productId)
+            ->setParameter('productQuantity', $productQuantity)
+            ->getQuery()->getResult();
+    }
+
+    public function getShelfsByProductAndQuantity(int $productId, int $productQuantity): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere(
+                '(s.product = :productId AND s.quantity >= :productQuantity)'
+            )
+            ->setParameter('productId', $productId)
+            ->setParameter('productQuantity', $productQuantity)
+            ->getQuery()->getResult();
+    }
 }

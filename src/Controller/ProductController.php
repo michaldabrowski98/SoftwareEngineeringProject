@@ -16,9 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-    private ProductCreator $productCreator;
-
     use AuthenticationCheckerTrait;
+    private ProductCreator $productCreator;
 
     private ProductListService $productListService;
 
@@ -68,6 +67,10 @@ class ProductController extends AbstractController
     #[Route('/api/product/edit/{id}/save', name: 'api_product_save', methods: ["POST"])]
     public function saveAction(Request $request): JsonResponse
     {
+        if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
+            return $invalidAuthentication;
+        }
+
         $productId = (int) $request->get('id');
         $productData = json_decode($request->getContent(), true);
         try {
@@ -113,6 +116,24 @@ class ProductController extends AbstractController
         }
 
         return new JsonResponse(['success' => true]);
+    }
+
+    #[Route('/api/product/list/simplified', name: 'api_product_list_simplified', methods: ["GET"])]
+    public function getNamesAction(): JsonResponse
+    {
+        if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
+            return $invalidAuthentication;
+        }
+
+        $productListSimplified = [];
+
+        try {
+            $productListSimplified = $this->productListService->getProductListSimplified();
+        } catch (\Exception $exception) {
+            // do nothing
+        }
+
+        return new JsonResponse($productListSimplified);
     }
 
     private function getProduct(array $productArray): Product

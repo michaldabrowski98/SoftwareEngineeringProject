@@ -29,6 +29,14 @@ class ProductRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    public function getProductsNamesAndIds(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select(['p.id', 'p.name'])
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     public function save(Product $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

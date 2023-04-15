@@ -29,11 +29,7 @@ class ShelfFixture extends Fixture implements FixtureGroupInterface
 
     private function getShelf(int $level): Shelf
     {
-        $shelf = new Shelf();
-        $shelf->setAlley(1);
-        $shelf->setLevel($level);
-        $shelf->setCol(1);
-        $shelf->setMaxWeight(500);
+        $shelf = new Shelf(1,$level,1,500);
         $shelf->setQuantity(rand(1,10));
         $shelf->setProduct($this->productRepository->findOneBy(['id' => rand(247, 255)]));
 

@@ -18,7 +18,7 @@
       <div>Data utworzenia konta: <i>{{this.createdDate}}</i></div>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="#ee5a32" @click="logout">
+      <v-btn color="white" style="background:#ee5a32" @click="logout">
         Wyloguj
       </v-btn>
     </v-card-actions>

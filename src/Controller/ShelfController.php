@@ -87,7 +87,7 @@ class ShelfController extends AbstractController
         );
     }
 
-    #[Route('/api/shelf/find/position', name: 'api_shelf_find', methods: ["GET"])]
+    #[Route('/api/shelf/find/position', name: 'api_shelf_find_position', methods: ["GET"])]
     public function findShelfPositionAction(Request $request): JsonResponse
     {
         if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {

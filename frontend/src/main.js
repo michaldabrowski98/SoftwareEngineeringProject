@@ -22,6 +22,7 @@ const router = createRouter({
         { path: '/register', component: Registration },
         { path: '/user', component: UserPage },
         { path: '/warehouse/scheme', component: WarehousePage },
+        { path: '/product/list/simplified', component: ReleaseProductList },
     ]
 })
 
@@ -30,6 +31,7 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import WarehousePage from "@/components/Warehouse/WarehousePage";
+import ReleaseProductList from "@/components/WarehouseRelease/ReleaseProductList.vue";
 
 const vuetify = createVuetify({
     ssr: true,

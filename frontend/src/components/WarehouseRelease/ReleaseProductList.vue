@@ -12,7 +12,7 @@
         <td class="text-left">{{ product.id }}</td>
         <td class="text-left">{{ product.name }}</td>
         <td class="text-left">
-          <v-text-field v-model="" placeholder="quantity" />
+          <v-text-field placeholder="quantity" />
         </td>
       </tr>
       </tbody>

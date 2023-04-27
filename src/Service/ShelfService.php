@@ -56,20 +56,4 @@ class ShelfService
 
         $this->entityManager->flush();
     }
-
-    public function removeShelfs(array $shelfs): void
-    {
-        foreach ($shelfs as $shelf) {
-            if (!isset($shelf['shelfId']) || !isset($shelf['quantity'])) {
-                continue;
-            }
-            /** @var Shelf $shelfEntity */
-            $shelfEntity = $this->shelfRepository->findOneBy(['id' => $shelf['shelfId']]);
-            $shelfEntity->setQuantity($shelfEntity->getQuantity() - $shelf['quantity']);
-
-            $this->entityManager->persist($shelfEntity);
-        }
-
-        $this->entityManager->flush();
-    }
 }

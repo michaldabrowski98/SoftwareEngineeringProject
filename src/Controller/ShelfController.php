@@ -120,4 +120,22 @@ class ShelfController extends AbstractController
 
         return new JsonResponse(['success' => true]);
     }
+
+    #[Route('/api/shelf/remove', name: 'api_shelf_remove', methods: ["PUT"])]
+    public function removeChosenProductsFromShelfsAction(Request $request): JsonResponse
+    {
+        if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
+            return $invalidAuthentication;
+        }
+
+        $requestContent = json_decode($request->getContent(), true);
+
+        try {
+            $this->shelfService->removeShelfs($requestContent['shelfs']);
+        } catch (\Exception $e) {
+            return new JsonResponse(['success' => false], 500);
+        }
+
+        return new JsonResponse(['success' => true]);
+    }
 }

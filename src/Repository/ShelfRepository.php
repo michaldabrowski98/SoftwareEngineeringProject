@@ -55,14 +55,13 @@ class ShelfRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function getShelfsByProductAndQuantity(int $productId, int $productQuantity): array
+    public function getShelfsByProductAndQuantity(int $productId): array
     {
         return $this->createQueryBuilder('s')
             ->andWhere(
-                '(s.product = :productId AND s.quantity >= :productQuantity)'
+                's.product = :productId'
             )
             ->setParameter('productId', $productId)
-            ->setParameter('productQuantity', $productQuantity)
             ->getQuery()->getResult();
     }
 }

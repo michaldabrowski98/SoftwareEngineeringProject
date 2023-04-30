@@ -1,4 +1,4 @@
-# Aplikacja magazynowa - oWMS
+# Aplikacja magazynowa - FreeWMS
 ## Spis treści
 1. [Opis](#opis)
 2. [Stack technologiczny](#stack-technologiczny)

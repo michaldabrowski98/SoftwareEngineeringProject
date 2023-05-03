@@ -73,14 +73,3 @@ class ShelfService
         $this->entityManager->flush();
     }
 }
-
-    private function createShelfEntity(mixed $type): Shelf
-    {
-        $shelf = new Shelf($type['alley'], $type['level'], $type['col'], $type['maxWeight']);
-        $shelf->setId($type['id']);
-        $shelf->setQuantity($type['quantity']);
-        $product = $this->productRepository->findOneBy(['id'=> $type['product_id']]);
-        $shelf->setProduct($product);
-        return $shelf;
-    }
-}

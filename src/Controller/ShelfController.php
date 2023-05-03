@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\AddProductToShelfDTO;
 use App\Finder\ShelfFinder;
 use App\Service\AuthenticationChecker;
 use App\Service\ShelfCreator;
@@ -137,5 +138,26 @@ class ShelfController extends AbstractController
         }
 
         return new JsonResponse(['success' => true]);
+    }
+    #[Route('/api/shelf/addProduct', name: 'api_warehouse_shelf_add_product', methods: ["POST"])]
+    public function addProductToShelf(Request $request): JsonResponse
+    {
+        if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
+            return $invalidAuthentication;
+        }
+
+        $addProductToShelfDTO = $this->addProductToShelfDTO(json_decode($request->getContent(), true));
+        $this->shelfService->addProductToShelf($addProductToShelfDTO);
+        return new JsonResponse();
+    }
+
+    private function addProductToShelfDTO(array $array): AddProductToShelfDTO
+    {
+        $dto = new AddProductToShelfDTO();
+        $dto->setId((int)$array['id']);
+        $dto->setWeight((float)$array['weight']);
+        $dto->setTotalWeight((float)$array['totalWeight']);
+        $dto->setQuantity((int)$array['quantity']);
+        return $dto;
     }
 }

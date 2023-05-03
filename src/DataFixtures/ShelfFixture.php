@@ -19,20 +19,26 @@ class ShelfFixture extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager): void
     {
-        for ($j = 1; $j < 3; $j++) {
-            for ($k = 1; $k < 5; $k++) {
-                for ($i = 1; $i <= 10; $i++) {
-                    $manager->persist($this->getShelf($j, $i, $k));
-                }
-            }
+        for ($i=1; $i<10; $i++)
+        {
+            $manager->persist($this->getShelf($i));
         }
 
         $manager->flush();
     }
 
-    private function getShelf(int $alley, int $level, int $col): Shelf
+    private function getShelf(int $level): Shelf
     {
-        return new Shelf($alley, $level, $col, 500);
+        $shelf = new Shelf(
+            1,
+            $level,
+            1,
+            500
+        );
+        $shelf->setQuantity(rand(1,10));
+        $shelf->setProduct($this->productRepository->findOneBy(['id' => rand(1, 15)]));
+
+        return $shelf;
     }
 
     public static function getGroups(): array

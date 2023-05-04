@@ -75,6 +75,7 @@ class ShelfService
     }
     public function addProductToShelf(AddProductToShelfDTO $addProductToShelf)
     {
+        $this->tryAddProductToFirstLevel($addProductToShelf);
         $availableShelf = $this->shelfRepository->getShelfsByProductOrEmpty($addProductToShelf->getId(), $addProductToShelf->getQuantity());
         $calculatedWeight = $addProductToShelf->getTotalWeight();
         $currentQuantity = $addProductToShelf->getQuantity();
@@ -121,5 +122,47 @@ class ShelfService
         $product = $this->productRepository->findOneBy(['id'=> $type['product_id']]);
         $shelf->setProduct($product);
         return $shelf;
+    }
+    private function tryAddProductToFirstLevel(AddProductToShelfDTO $addProductToShelf): AddProductToShelfDTO
+    {
+        $products = $this->shelfRepository->getShelfsByProductAndQuantity($addProductToShelf->getId());
+        if (!$products) {
+            $shelf = $this->shelfRepository->getShelfsFirstLevel($addProductToShelf->getId())[0];
+            $calculatedWeight = $addProductToShelf->getTotalWeight();
+            $currentQuantity = $addProductToShelf->getQuantity();
+            $maxQuantity = floor($shelf['maxWeight'] / $addProductToShelf->getWeight());
+            $shelf['product_id'] = $addProductToShelf->getId();
+            if ($shelf['quantity'] != null) {
+                if ($currentQuantity - $maxQuantity > 0) {
+                    $addedQuantity = $maxQuantity - $shelf['quantity'];
+                    $currentQuantity = $currentQuantity - $maxQuantity + $shelf['quantity'];
+                    $shelf['quantity'] = $maxQuantity;
+                } else if ($currentQuantity + $shelf['quantity'] > $maxQuantity) {
+                    $addedQuantity = $maxQuantity - $shelf['quantity'];
+                    $shelf['quantity'] = $shelf['quantity'] + $addedQuantity;
+                    $currentQuantity = $currentQuantity - $addedQuantity;
+                } else {
+                    $addedQuantity = $currentQuantity;
+                    $shelf['quantity'] = $shelf['quantity'] + $addedQuantity;
+                    $currentQuantity = 0;
+                }
+            } else {
+                if ($currentQuantity - $maxQuantity > 0) {
+                    $shelf['quantity'] = $maxQuantity;
+                    $addedQuantity = $maxQuantity;
+                } else {
+                    $shelf['quantity'] = $currentQuantity;
+                    $addedQuantity = $currentQuantity;
+                }
+                $currentQuantity = $currentQuantity - $maxQuantity;
+            }
+            $this->shelfRepository->merge($this->createShelfEntity($shelf));
+            $usedWeight = $addedQuantity * $addProductToShelf->getWeight();
+            $calculatedWeight = $calculatedWeight - $usedWeight;
+
+            $addProductToShelf->setTotalWeight($calculatedWeight);
+            $addProductToShelf->setQuantity($currentQuantity);
+        }
+        return $addProductToShelf;
     }
 }

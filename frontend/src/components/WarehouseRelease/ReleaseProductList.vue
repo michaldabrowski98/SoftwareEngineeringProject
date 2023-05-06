@@ -10,25 +10,95 @@
         </tr>
         </thead>
         <tbody class="table-hover">
-        <tr  v-for="(product,i) in x" :key="i">
-          <td><v-text-field disabled v-model="changedProducts[i].id"></v-text-field></td>
-          <td><v-text-field disabled v-model="changedProducts[i].name"></v-text-field></td>
+        <tr  v-for="(product,i) in changedProducts" :key="i">
+          <td><v-text-field disabled v-model="changedProducts[i].id"/></td>
+          <td><v-text-field disabled v-model="changedProducts[i].name"/></td>
           <td><v-text-field v-model="changedProducts[i].quantity" label="Ilość"/></td>
         </tr>
         </tbody>
       </v-table>
-      <v-btn type="submit" block class="mt-2" style="background:#ee5a32">Sprawdź dostępność</v-btn>
+      <v-dialog
+          v-model="dialog"
+          fullscreen
+          :scrim="false"
+          transition="dialog-bottom-transition"
+      >
+        <template v-slot:activator="{ props }">
+      <v-btn type="submit" block class="mt-2" style="background:#ee5a32 " @click="dialog = true" v-bind="props">Sprawdź dostępność</v-btn>
+        </template>
+        <v-card>
+          <v-toolbar
+              dark
+              color="#ee5a32"
+          >
+            <v-btn
+                icon
+                dark
+                @click="dialog = false"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Szczegóły pobrania</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-list>
+              <v-list-item v-for="alert in alerts" :key="alert.id">
+                <v-alert :type="alert.type"
+                         :title="alert.title"
+                         style="width: 80vw;"
+                ></v-alert>
+              </v-list-item>
+            </v-list>
+            <v-toolbar-items>
+              <v-btn
+                  variant="text"
+                  @click="save"
+              >
+                Zapisz
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-list
+              lines="two"
+              subheader
+          >
+
+            <v-form fast-fail @submit.prevent="register">
+              <v-table width="80%" class="mx-auto pa-12" rounded="true">
+                <thead>
+                <tr>
+                  <th class="text-left">ID</th>
+                  <th class="text-left">Ilość</th>
+                  <th class="text-left">ID Półki</th>
+                  <th class="text-left">Półka</th>
+                  <th class="text-left">Regał</th>
+                  <th class="text-left">Alejka</th>
+                </tr>
+                </thead>
+                <tbody class="table-hover">
+                <tr v-for="(product,i) in availability" :key="i">
+                  <td><v-text-field disabled v-model="availability[i].productId"/></td>
+                  <td><v-text-field disabled v-model="availability[i].quantity"/></td>
+                  <td><v-text-field disabled v-model="availability[i].shelfId"/></td>
+                  <td><v-text-field disabled v-model="availability[i].shelf"/></td>
+                  <td><v-text-field disabled v-model="availability[i].column"/></td>
+                  <td><v-text-field disabled v-model="availability[i].alley"/></td>
+                </tr>
+                </tbody>
+              </v-table>
+            </v-form>
+          </v-list>
+          <v-divider></v-divider>
+        </v-card>
+      </v-dialog>
     </v-form>
   </v-container>
 </template>
 
 <script>
 import axios from 'axios';
-import ProductAvailabilityCheck from "@/components/WarehouseRelease/ProductAvailabilityCheck.vue";
 
 export default {
   name: "ProductListSimplified",
-  components: {ProductAvailabilityCheck},
   data() {
     return {
       x: [],
@@ -38,6 +108,9 @@ export default {
       quantity: 0,
       display: false,
       errors: [],
+      dialogm1: '',
+      dialog: false,
+      alerts: [],
       config: {
         headers: {
           "Authorization": `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`
@@ -48,7 +121,7 @@ export default {
   },
   created() {
     if (null == sessionStorage.getItem('token')) {
-      // this.$router.push('/login');
+      this.$router.push('/login');
     }
 
     axios.get(`http://localhost:8082/api/product/list/simplified`, this.config)
@@ -57,7 +130,6 @@ export default {
             this.$router.push('/');
           }
           for (let i = 0; i < response.data.length; i++) {
-            this.x[i] = {id: response.data[i].id, name: response.data[i].name, quantity: 0};
             this.changedProducts[i] = {id: response.data[i].id, name: response.data[i].name, quantity: 0};
           }
         })
@@ -83,7 +155,11 @@ export default {
             if (response.status !== 200) {
               this.$router.push('/');
             }
-            this.availability = response.data
+            for (let i = 0; i < response.data.length; i++) {
+              this.availability[i] = {productId: response.data[i].productId, quantity: response.data[i].quantity,
+                                      shelfId: response.data[i].shelfId, shelf: response.data[i].shelf,
+                                      column: response.data[i].column, alley: response.data[i].alley};
+            }
           })
           .catch( e => {
             this.errors.push(e)
@@ -91,9 +167,37 @@ export default {
 
           });
     },
-    toggle() {
-      this.display = !this.display;
-    }
+      save() {
+        for (let i = 0; i < this.availability.length; i++) {
+          this.ProductList[i] = {shelfId: this.availability[i].shelfId, quantity: this.availability[i].quantity};
+        }
+        let putRequest = {shelfs: this.ProductList, config: this.config};
+        axios.put(`http://localhost:8082/api/shelf/remove`, putRequest)
+            .then(
+                (res) => {
+                  if (res.status !== 200) {
+                    this.alerts.push({
+                      type: 'error',
+                      title: 'Nie udało się wydać przedmiotów, spróbuj ponownie później.'
+                    });
+                  } else {
+                    this.alerts.push({
+                      type: 'success',
+                      title: 'Wydano przedmioty.'
+                    });
+                  }
+                }
+            )
+            .catch(
+                () => {
+                  this.alerts.push({
+                    type: 'error',
+                    title: 'Nie udało się wydać przedmiotów, spróbuj ponownie później'
+                  });
+                }
+            )
+        ;
+      }
   }
 }
 

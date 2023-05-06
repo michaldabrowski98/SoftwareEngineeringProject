@@ -40,12 +40,12 @@ class ShelfFinder
     {
         $shelfs = [];
         foreach ($products as $product) {
-            if (!isset($product['productId'])) {
+            if (!isset($product['id'])) {
                 continue;
             }
 
             $shelfs = array_merge($shelfs, $this->createShelfDTOs(
-                $this->shelfRepository->getShelfsByProductAndQuantity($product['productId'])
+                $this->shelfRepository->getShelfsByProductAndQuantity($product['id'])
                 )
             );
         }

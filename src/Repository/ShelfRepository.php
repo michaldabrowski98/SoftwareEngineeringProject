@@ -47,12 +47,12 @@ class ShelfRepository extends ServiceEntityRepository
             ->select('s, p')
             ->leftJoin('s.product', 'p')
             ->andWhere(
-                '(p = :productId AND s.maxWeight > p.weight * :productQuantity) 
-                OR (s.product IS NULL AND s.quantity IS NULL)'
+                '(p = :productId AND (s.maxWeight / p.weight +1) > s.quantity) 
+                OR (s.product IS NULL AND s.quantity IS NULL)
+                AND s.level != 1'
             )
             ->setParameter('productId', $productId)
-            ->setParameter('productQuantity', $productQuantity)
-            ->getQuery()->getResult();
+            ->getQuery()->getArrayResult();
     }
 
     public function getShelfsByProductAndQuantity(int $productId): array
@@ -64,4 +64,24 @@ class ShelfRepository extends ServiceEntityRepository
             ->setParameter('productId', $productId)
             ->getQuery()->getResult();
     }
+    public function merge(Shelf $shelf){
+        $this->getEntityManager()->merge($shelf);
+        $this->getEntityManager()->flush();
+    }
+    public function getShelfsFirstLevel(int $productId): array
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s, p')
+            ->leftJoin('s.product', 'p')
+            ->andWhere(
+                '(p = :productId AND (s.maxWeight / p.weight +1) > s.quantity) 
+                OR (s.product IS NULL AND s.quantity IS NULL)
+                AND s.level = 1'
+            )
+            ->setParameter('productId', $productId)
+            ->getQuery()->getArrayResult();
+
+    }
+
+
 }

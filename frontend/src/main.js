@@ -13,6 +13,8 @@ import Registration from "./components/Login/Registration";
 import UserPage from "./components/UserPage/UserPage";
 import ProductAvailabilityCheck from "./components/WarehouseRelease/ProductAvailabilityCheck";
 
+import DeliveryList from "./components/Delivery/DeliveryList";
+import AddDeliveryForm from "./components/Delivery/AddDeliveryForm";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -24,6 +26,8 @@ const router = createRouter({
         { path: '/register', component: Registration },
         { path: '/user', component: UserPage },
         { path: '/warehouse/scheme', component: WarehousePage },
+        { path: '/delivery/list', component: DeliveryList },
+        { path: '/shelf/addProduct/:id', component: AddDeliveryForm },
         { path: '/product/list/simplified', component: ReleaseProductList },
         { path: '/shelf/find/position', component: ProductAvailabilityCheck }
     ]

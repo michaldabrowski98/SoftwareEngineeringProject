@@ -41,6 +41,8 @@ export default {
       errors: [],
       changeSucces: false,
       changeErr: false,
+      errorAlert: false,
+      errorMessage: '',
       nameRules: [
         v => !!v || 'Nazwa produktu jest wymagana',
         v => (v && v.length <= 50) || 'Nazwa produktu nie może mieć więcej niż 50 znaków',
@@ -74,6 +76,8 @@ export default {
     axios.get(`http://localhost:8082/api/product/edit/`+ this.$route.params.id, config)
         .then(response => {
           if (response.status !== 200) {
+            this.errorMessage = "Nie udało się uruchomić edycji produktu."
+            this.errorAlert = true;
             this.$router.push('/')
           }
           this.product = response.data;
@@ -98,9 +102,25 @@ export default {
       axios.post(`http://localhost:8082/api/product/edit/` + this.$route.params.id + `/save`, postData)
           .then(() => {
             this.changeSucces = true;
+            this.refreshProducts();
           })
           .catch(() => {
             this.changeErr = true;
+          });
+    },
+    refreshProducts() {
+      axios.get(`http://localhost:8082/api/product/list`, this.config)
+          .then(response => {
+            if (response.status !== 200) {
+              this.errorMessage = "Nie udało się pobrać listy produktów.";
+              this.errorAlert = true;
+              this.$router.push('/');
+            }
+            this.products = response.data;
+          })
+          .catch(e => {
+            this.errors.push(e);
+            this.$router.push('/');
           });
     },
   }

@@ -1,5 +1,13 @@
 <template>
   <v-row justify="center">
+      <v-list>
+          <v-list-item v-for="alert in alerts" :key="alert.id">
+              <v-alert :type="alert.type"
+                       :title="alert.title"
+                       style="width: 80vw;"
+              ></v-alert>
+          </v-list-item>
+      </v-list>
     <v-dialog
         v-model="dialog"
         scrollable
@@ -48,7 +56,7 @@
           <v-btn
               color="#ee5a32"
               variant="text"
-              @click="dialog = false"
+              @click="deleteAlley(alley.alleyNum)"
           >
             Usuń
           </v-btn>
@@ -66,15 +74,54 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "AlleyComponent",
   props: ['alley'],
+  methods: {
+      deleteAlley(alleyNum) {
+          let requestData = {
+              headers: {
+                  "Authorization": `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`
+              },
+              alley: alleyNum
+          }
+          console.log(JSON.stringify(requestData));
+          axios.post(`http://localhost:8082/api/warehouse/remove/alley`, requestData)
+              .then(
+                  (res) => {
+                      if (res.status !== 200) {
+                          this.alerts.push({
+                              type: 'error',
+                              title: 'Nie udało się usunąć alejki, spróbuj ponownie później'
+                          });
+                      } else {
+                          this.alerts.push({
+                              type: 'success',
+                              title: 'Usunięto alejkę'
+                          });
+                      }
+                  }
+              )
+              .catch(
+                  () => {
+                      this.alerts.push({
+                          type: 'error',
+                          title: 'Nie udało się dodać alejki, spróbuj ponownie później'
+                      });
+                  }
+              )
+          ;
+      }
+  },
   data () {
     return {
       dialogm1: '',
       dialog: false,
+      alerts: []
     }
-  },
+  }
 }
 </script>
 

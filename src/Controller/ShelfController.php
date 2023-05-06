@@ -65,9 +65,21 @@ class ShelfController extends AbstractController
         return new JsonResponse(['message' => 'success']);
     }
 
-    #[Route('/api/warehouse/remove/alley', name: 'api_warehouse_new_alley', methods: ["DELETE"])]
+    #[Route('/api/warehouse/remove/alley', name: 'api_warehouse_remove_alley', methods: ["POST"])]
     public function removeAlleyAction(Request $request): JsonResponse
     {
+        $alley = json_decode($request->getContent(), true)['alley'] ?? null;
+
+        if (null === $alley) {
+            return new JsonResponse(['message' => 'error'], 401);
+        }
+
+        try {
+            $this->shelfService->removeAlley((int) $alley);
+        } catch(\Exception $e) {
+            return new JsonResponse(['message' => 'error'], 401);
+        }
+
         return new JsonResponse(['message' => 'success']);
     }
 

@@ -114,6 +114,20 @@ class ShelfService
         }
     }
 
+    public function removeAlley(int $alleyNumber): void
+    {
+        $shelfs = $this->shelfRepository->findBy(
+            [
+                'alley' => $alleyNumber
+            ]
+        );
+
+        foreach ($shelfs as $shelf) {
+            $this->entityManager->remove($shelf);
+        }
+        $this->entityManager->flush();
+    }
+
     private function createShelfEntity(mixed $type): Shelf
     {
         $shelf = new Shelf($type['alley'], $type['level'], $type['col'], $type['maxWeight']);

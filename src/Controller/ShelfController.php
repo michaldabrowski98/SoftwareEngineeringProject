@@ -83,6 +83,24 @@ class ShelfController extends AbstractController
         return new JsonResponse(['message' => 'success']);
     }
 
+    #[Route('/api/warehouse/remove/shelf', name: 'api_warehouse_remove_shelf', methods: ["POST"])]
+    public function removeShelfAction(Request $request): JsonResponse
+    {
+        $shelfId = json_decode($request->getContent(), true)['shelfId'] ?? null;
+
+        if (null === $shelfId) {
+            return new JsonResponse(['message' => 'error'], 401);
+        }
+
+        try {
+            $this->shelfService->removeShelf((int) $shelfId);
+        } catch(\Exception $e) {
+            return new JsonResponse(['message' => 'error'], 401);
+        }
+
+        return new JsonResponse(['message' => 'success']);
+    }
+
     #[Route('/api/shelf/find', name: 'api_shelf_find', methods: ["GET"])]
     public function findAvailableShelfsAction(Request $request): JsonResponse
     {

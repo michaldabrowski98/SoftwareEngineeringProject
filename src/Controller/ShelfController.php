@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\AddProductToShelfDTO;
 use App\Finder\ShelfFinder;
 use App\Service\AuthenticationChecker;
 use App\Service\ShelfCreator;
@@ -64,9 +65,21 @@ class ShelfController extends AbstractController
         return new JsonResponse(['message' => 'success']);
     }
 
-    #[Route('/api/warehouse/remove/alley', name: 'api_warehouse_new_alley', methods: ["DELETE"])]
+    #[Route('/api/warehouse/remove/alley', name: 'api_warehouse_remove_alley', methods: ["POST"])]
     public function removeAlleyAction(Request $request): JsonResponse
     {
+        $alley = json_decode($request->getContent(), true)['alley'] ?? null;
+
+        if (null === $alley) {
+            return new JsonResponse(['message' => 'error'], 401);
+        }
+
+        try {
+            $this->shelfService->removeAlley((int) $alley);
+        } catch(\Exception $e) {
+            return new JsonResponse(['message' => 'error'], 401);
+        }
+
         return new JsonResponse(['message' => 'success']);
     }
 
@@ -137,5 +150,26 @@ class ShelfController extends AbstractController
         }
 
         return new JsonResponse(['success' => true]);
+    }
+    #[Route('/api/shelf/addProduct', name: 'api_warehouse_shelf_add_product', methods: ["POST"])]
+    public function addProductToShelf(Request $request): JsonResponse
+    {
+        if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
+            return $invalidAuthentication;
+        }
+
+        $addProductToShelfDTO = $this->addProductToShelfDTO(json_decode($request->getContent(), true));
+        $this->shelfService->addProductToShelf($addProductToShelfDTO);
+        return new JsonResponse();
+    }
+
+    private function addProductToShelfDTO(array $array): AddProductToShelfDTO
+    {
+        $dto = new AddProductToShelfDTO();
+        $dto->setId((int)$array['id']);
+        $dto->setWeight((float)$array['weight']);
+        $dto->setTotalWeight((float)$array['totalWeight']);
+        $dto->setQuantity((int)$array['quantity']);
+        return $dto;
     }
 }

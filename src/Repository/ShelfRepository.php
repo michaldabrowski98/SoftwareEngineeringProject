@@ -52,7 +52,7 @@ class ShelfRepository extends ServiceEntityRepository
                 AND s.level != 1'
             )
             ->setParameter('productId', $productId)
-            ->getQuery()->getArrayResult();
+            ->getQuery()->getResult();
     }
 
     public function getShelfsByProductAndQuantity(int $productId): array

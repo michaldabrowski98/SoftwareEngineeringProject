@@ -11,6 +11,8 @@ import ProductEdit from "./components/Product/ProductEdit";
 import Login from "./components/Login/Login";
 import Registration from "./components/Login/Registration";
 import UserPage from "./components/UserPage/UserPage";
+
+
 import DeliveryList from "./components/Delivery/DeliveryList";
 import AddDeliveryForm from "./components/Delivery/AddDeliveryForm";
 
@@ -26,6 +28,7 @@ const router = createRouter({
         { path: '/warehouse/scheme', component: WarehousePage },
         { path: '/delivery/list', component: DeliveryList },
         { path: '/shelf/addProduct/:id', component: AddDeliveryForm },
+        { path: '/product/list/simplified', component: ReleaseProductList },
     ]
 })
 
@@ -34,6 +37,7 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import WarehousePage from "@/components/Warehouse/WarehousePage";
+import ReleaseProductList from "@/components/WarehouseRelease/ReleaseProductList.vue";
 
 const vuetify = createVuetify({
     ssr: true,

@@ -41,7 +41,7 @@
                   <td class="text-left">{{ shelf.productId }}</td>
                   <td class="text-left">{{ shelf.quantity }}</td>
                   <td class="text-left"><v-text-field v-model="newQuantity"></v-text-field></td>
-                  <td class="text-left"><v-btn style="background:#ee5a32" @click="chooseShelf(shelf.shelfId, this.$route.params.id, newQuantity)">Wybierz</v-btn></td>
+                  <td class="text-left"><v-btn style="background:#ee5a32" @click="chooseShelf(shelf.shelfId, this.$route.params.id, newQuantity, shelf.alley, shelf.column, shelf.shelf)">Wybierz</v-btn></td>
               </tr>
               </tbody>
           </template>
@@ -115,7 +115,7 @@ export default {
 
       );
     },
-    chooseShelf(shelfId, productId, quantity) {
+    chooseShelf(shelfId, productId, quantity, alley, column, shelf) {
         const postData = {
             data: [
                 {
@@ -141,7 +141,8 @@ export default {
                     this.alerts.push(
                         {
                             type: 'success',
-                            title: 'Dodano produkt na półkę w systemie, teraz połóż go w wybranym miejscu'
+                            title: 'Dodano produkt na półkę w systemie, teraz połóż go w wybranym miejscu\nAlejka: '
+                                + alley + ' \nKolumna: ' + column + '\n Półka: ' + shelf + '\n Ilość: ' + quantity
                         }
                     )
                     this.newQuantity = 0;

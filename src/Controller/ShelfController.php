@@ -125,11 +125,11 @@ class ShelfController extends AbstractController
             return $invalidAuthentication;
         }
 
-        $requestContent = json_decode($request->getContent(), true);
-
+//        dd(json_decode($request->get('products'), true));
+        $products = json_decode($request->get('products'), true);
         return new JsonResponse(
             $this->shelfFinder->findShelfsPositionsByQuantity(
-                $requestContent["products"]
+                $products
             )
         );
     }

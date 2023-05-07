@@ -46,11 +46,11 @@ class ShelfService
                 continue;
             }
             /** @var Shelf $shelfEntity */
-            $shelfEntity = $this->shelfRepository->findOneBy(['id' => $shelf['shelfId']]);
+            $shelfEntity = $this->shelfRepository->findOneBy(['id' => (int) $shelf['shelfId']]);
             $shelfEntity->setProduct(
-                $this->productRepository->findOneBy(['id' => $shelf['productId']])
+                $this->productRepository->findOneBy(['id' => (int) $shelf['productId']])
             );
-            $shelfEntity->setQuantity($shelf['quantity']);
+            $shelfEntity->setQuantity((int) $shelf['quantity']);
 
             $this->entityManager->persist($shelfEntity);
         }

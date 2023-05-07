@@ -101,7 +101,7 @@ class ShelfController extends AbstractController
         return new JsonResponse(['message' => 'success']);
     }
 
-    #[Route('/api/shelf/find', name: 'api_shelf_find', methods: ["GET"])]
+    #[Route('/api/shelf/find', name: 'api_shelf_find', methods: ["POST"])]
     public function findAvailableShelfsAction(Request $request): JsonResponse
     {
         if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
@@ -134,14 +134,14 @@ class ShelfController extends AbstractController
         );
     }
 
-    #[Route('/api/shelf/save', name: 'api_shelf_save', methods: ["PUT"])]
+    #[Route('/api/shelf/save', name: 'api_shelf_save', methods: ["POST"])]
     public function saveChosenShelfsAction(Request $request): JsonResponse
     {
         if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
             return $invalidAuthentication;
         }
 
-        $requestContent = json_decode($request->getContent(), true);
+        $requestContent = json_decode($request->getContent(), true)['data'];
 
         try {
             $this->shelfService->saveShelfs($requestContent);
@@ -152,7 +152,7 @@ class ShelfController extends AbstractController
         return new JsonResponse(['success' => true]);
     }
 
-    #[Route('/api/shelf/remove', name: 'api_shelf_remove', methods: ["PUT"])]
+    #[Route('/api/shelf/remove', name: 'api_shelf_remove', methods: ["POST"])]
     public function removeChosenProductsFromShelfsAction(Request $request): JsonResponse
     {
         if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {

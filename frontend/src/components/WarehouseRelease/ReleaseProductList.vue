@@ -172,8 +172,8 @@ export default {
         for (let i = 0; i < this.availability.length; i++) {
           this.ProductList[i] = {shelfId: this.availability[i].shelfId, quantity: this.availability[i].quantity};
         }
-        let putRequest = {shelfs: this.ProductList, config: this.config};
-        axios.put(`http://localhost:8082/api/shelf/remove`, putRequest)
+        let putRequest = {shelfs: this.ProductList};
+        axios.post(`http://localhost:8082/api/shelf/remove`, putRequest, this.config)
             .then(
                 (res) => {
                   if (res.status !== 200) {

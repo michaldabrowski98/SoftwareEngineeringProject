@@ -5,6 +5,7 @@ namespace App\Service;
 use App\DTO\ProductDTO;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
+use App\Repository\ShelfRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProductService
@@ -12,12 +13,16 @@ class ProductService
     private ProductRepository $productRepository;
     private EntityManagerInterface $entityManager;
 
+    private ShelfRepository $shelfRepository;
+
     public function __construct(
         ProductRepository $productRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        ShelfRepository $shelfRepository
     ) {
         $this->productRepository = $productRepository;
         $this->entityManager = $entityManager;
+        $this->shelfRepository = $shelfRepository;
     }
 
     public function getProductEntityById(int $id): Product
@@ -28,6 +33,10 @@ class ProductService
     public function removeProductById(int $productId): void
     {
         $productEntity = $this->productRepository->findOneBy(['id' => $productId]);
+        $shelfs = $this->shelfRepository->findBy(['product' => $productEntity]);
+        foreach ($shelfs as $shelf) {
+            $this->entityManager->remove($shelf);
+        }
         $this->entityManager->remove($productEntity);
         $this->entityManager->flush();
     }

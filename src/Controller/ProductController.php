@@ -108,10 +108,9 @@ class ProductController extends AbstractController
         if (null !== $invalidAuthentication = $this->isAuthenticationInvalid()) {
             return $invalidAuthentication;
         }
-
         try {
             $this->productService->removeProductById($request->get('id'));
-        } catch (\Exception) {
+        } catch (\Exception $e) {
             return new JsonResponse(['success' => false]);
         }
 

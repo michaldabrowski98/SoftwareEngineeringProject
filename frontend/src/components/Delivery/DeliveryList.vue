@@ -1,6 +1,6 @@
 <template>
 <div class="rectangle">
-  <table class="table-fill">
+  <v-table theme="dark">
     <thead>
     <tr>
       <th class="text-left">Id</th>
@@ -19,11 +19,11 @@
       <td class="text-left">{{ product.weight }}</td>
       <td class="text-left">{{ product.price }}</td>
       <td class="text-left">
-        <router-link :to="'/shelf/addProduct/' + product.id"><button class="edit_button">Dodaj na półkę</button></router-link>
+        <router-link :to="'/shelf/addProduct/' + product.id"><v-btn class="edit_button">Dodaj na półkę</v-btn></router-link>
       </td>
     </tr>
     </tbody>
-  </table>
+  </v-table>
 </div>
 </template>
 

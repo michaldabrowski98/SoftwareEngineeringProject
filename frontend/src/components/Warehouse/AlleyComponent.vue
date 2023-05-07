@@ -38,7 +38,7 @@
                     <v-card-text>Ilość produktów: {{ shelf.quantity ?? 0 }}</v-card-text>
                     <v-card-actions>
                       <v-btn color="#ee5a32">Edytuj</v-btn>
-                    <v-btn v-if="shelf.quantity == NULL" color="#ee5a32">Usuń</v-btn>
+                    <v-btn v-if="shelf.quantity == NULL" color="#ee5a32" @click="deleteShelf(shelf.id)">Usuń</v-btn>
                     </v-card-actions>
                   </v-card>
                 </template>
@@ -102,6 +102,7 @@ export default {
                               title: 'Usunięto alejkę'
                           });
                       }
+                      this.dialog = false;
                   }
               )
               .catch(
@@ -110,6 +111,43 @@ export default {
                           type: 'error',
                           title: 'Nie udało się dodać alejki, spróbuj ponownie później'
                       });
+                      this.dialog = false;
+                  }
+              )
+          ;
+      },
+      deleteShelf(shelfId) {
+          let requestData = {
+              headers: {
+                  "Authorization": `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`
+              },
+              shelfId: shelfId
+          }
+          console.log(JSON.stringify(requestData));
+          axios.post(`http://localhost:8082/api/warehouse/remove/shelf`, requestData)
+              .then(
+                  (res) => {
+                      if (res.status !== 200) {
+                          this.alerts.push({
+                              type: 'error',
+                              title: 'Nie udało się usunąć półki, spróbuj ponownie później'
+                          });
+                      } else {
+                          this.alerts.push({
+                              type: 'success',
+                              title: 'Usunięto półkę'
+                          });
+                      }
+                      this.dialog = false;
+                  }
+              )
+              .catch(
+                  () => {
+                      this.alerts.push({
+                          type: 'error',
+                          title: 'Nie udało się dodać półki, spróbuj ponownie później'
+                      });
+                      this.dialog = false;
                   }
               )
           ;

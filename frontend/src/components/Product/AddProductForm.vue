@@ -42,6 +42,8 @@ export default {
       requestSuccess: false,
       requestFail: false,
       displayForm: true,
+      errorAlert: false,
+      errorMessage: '',
       nameRules: [
         v => !!v || 'Nazwa produktu jest wymagana',
         v => (v && v.length <= 50) || 'Nazwa produktu nie może mieć więcej niż 50 znaków',
@@ -69,14 +71,29 @@ export default {
         description: this.description,
         weight: this.weight,
         price: this.price
-
       };
       axios.post(`http://localhost:8082/api/product/new`, postData)
           .then(() => {
-        this.requestSuccess = true;
-      })
+            this.requestSuccess = true;
+            this.refreshProducts();
+          })
           .catch(() => {
             this.requestFail = true;
+          });
+    },
+    refreshProducts() {
+      axios.get(`http://localhost:8082/api/product/list`, this.config)
+          .then(response => {
+            if (response.status !== 200) {
+              this.errorMessage = "Nie udało się pobrać listy produktów.";
+              this.errorAlert = true;
+              this.$router.push('/');
+            }
+            this.products = response.data;
+          })
+          .catch(e => {
+            this.errors.push(e);
+            this.$router.push('/');
           });
     },
     toggleView() {

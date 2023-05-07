@@ -9,7 +9,7 @@
         v-model="rmproduct"
     ></v-alert>
     <v-container v-show="display"><AddProductForm/></v-container>
-    <v-simple-table class="table-fill">
+    <v-table theme="dark">
       <template v-slot:default>
         <thead>
         <tr>
@@ -37,7 +37,7 @@
         </tr>
         </tbody>
       </template>
-    </v-simple-table>
+    </v-table>
   </v-container>
 </template>
 <script>

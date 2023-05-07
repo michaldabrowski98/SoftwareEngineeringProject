@@ -1,19 +1,33 @@
 <template>
-  <div class="rectangle" v-show="displayForm">
-    <div class="close_button" @click="toggleView()">[x]</div>
+  <v-card class="rectangle" v-show="displayForm">
+    <v-btn class="close_button" @click="toggleView()" style="background:#ee5a32">ANULUJ</v-btn>
     <p>Nazwa produktu</p>
-    <input v-model="name" placeholder="nazwa..." />
+    <v-text-field v-model="name" placeholder="nazwa..." :rules="nameRules"/>
     <p>Opis produktu</p>
-    <input v-model="description" placeholder="opis..." />
+    <v-text-field v-model="description" placeholder="opis..." :rules="descriptionRules" />
     <p>Waga</p>
-    <input v-model="weight" placeholder="waga..." />
+    <v-text-field v-model="weight" placeholder="waga..." :rules="weightRules" />
     <p>Cena</p>
-    <input v-model="price" placeholder="cena..." />
+    <v-text-field v-model="price" placeholder="cena..." :rules="priceRules" />
     <br/>
-    <button @click.prevent="addProduct()">Dodaj produkt</button>
-  </div>
-</template>
+    <v-btn @click.prevent="addProduct()" style="background:#ee5a32">Dodaj produkt</v-btn>
+  </v-card>
 
+  <v-alert
+      color="succes"
+      icon="$succes"
+      title="Dodano produkt."
+      v-model="requestSuccess"
+  ></v-alert>
+
+  <v-alert
+      color="error"
+      icon="$error"
+      title="Błąd. Nie dodano produktu."
+      v-model="requestFail"
+  ></v-alert>
+
+</template>
 <script>
 import axios from "axios";
 
@@ -26,7 +40,28 @@ export default {
       weight: 0,
       price: 0,
       requestSuccess: false,
-      displayForm: true
+      requestFail: false,
+      displayForm: true,
+      errorAlert: false,
+      errorMessage: '',
+      nameRules: [
+        v => !!v || 'Nazwa produktu jest wymagana',
+        v => (v && v.length <= 50) || 'Nazwa produktu nie może mieć więcej niż 50 znaków',
+      ],
+      descriptionRules: [
+        v => !!v || 'Opis produktu jest wymagany',
+        v => (v && v.length <= 500) || 'Opis produktu nie może mieć więcej niż 500 znaków',
+      ],
+      weightRules: [
+        v => !!v || 'Waga produktu jest wymagana',
+        v => (v && !isNaN(v)) || 'Waga produktu musi być liczbą',
+        v => (v && v >= 0) || 'Waga produktu nie może być ujemna',
+      ],
+      priceRules: [
+        v => !!v || 'Cena produktu jest wymagana',
+        v => (v && !isNaN(v)) || 'Cena produktu musi być liczbą',
+        v => (v && v >= 0) || 'Cena produktu nie może być ujemna',
+      ],
     };
   },
   methods: {
@@ -37,7 +72,29 @@ export default {
         weight: this.weight,
         price: this.price
       };
-      axios.post(`http://localhost:8082/api/product/new`, postData);
+      axios.post(`http://localhost:8082/api/product/new`, postData)
+          .then(() => {
+            this.requestSuccess = true;
+            this.refreshProducts();
+          })
+          .catch(() => {
+            this.requestFail = true;
+          });
+    },
+    refreshProducts() {
+      axios.get(`http://localhost:8082/api/product/list`, this.config)
+          .then(response => {
+            if (response.status !== 200) {
+              this.errorMessage = "Nie udało się pobrać listy produktów.";
+              this.errorAlert = true;
+              this.$router.push('/');
+            }
+            this.products = response.data;
+          })
+          .catch(e => {
+            this.errors.push(e);
+            this.$router.push('/');
+          });
     },
     toggleView() {
       this.displayForm = false;

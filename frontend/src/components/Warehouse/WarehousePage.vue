@@ -57,6 +57,4 @@ export default {
   unmounted() {}
 }
 </script>
-
-<style scoped>
-</style>
+<style></style>
